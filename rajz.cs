@@ -1,91 +1,117 @@
 using System;
-using System.Threading;
-namespace rajz {
-  class Program
+
+class Program
 {
+    static int cursorX = 1; 
+    static int cursorY = 1; 
+    static ConsoleColor currentColor = ConsoleColor.White;
+    static ConsoleColor cursorColor = ConsoleColor.Black; 
+
     static void Main()
     {
-        rajz rajzolas = new rajz();
-        rajzolas.Start();
-    }
-}
-internal class rajz
-{
-    public void Start()
-    {
-        Console.CursorVisible = false;
-        int x = Console.WindowWidth / 2;
-        int y = Console.WindowHeight / 2;
-        ConsoleColor currentColor = ConsoleColor.White;
+        Console.CursorVisible = false; 
+        DrawFrame();
 
-        
-        Console.SetCursorPosition(x, y);
-        Console.Write("█");
+        ConsoleKeyInfo keyInfo;
 
         while (true)
         {
-            if (Console.KeyAvailable)
+            Console.SetCursorPosition(0, Console.WindowHeight - 5);
+            Console.WriteLine("Használja a nyilakat a kurzor mozgatásához.");
+            Console.WriteLine("Nyomja meg a SPACE-t a színezéshez.");
+            Console.WriteLine("Számgombok a szín váltásához (0-9).");
+            Console.WriteLine("SHIFT + Számgomb a kurzor színének változtatásához.");
+            Console.WriteLine($"Aktuális szín: {currentColor}, Kurzor szín: {cursorColor}");
+
+            DrawCursor();
+
+            keyInfo = Console.ReadKey(true);
+
+            switch (keyInfo.Key)
             {
-                var key = Console.ReadKey(true).Key;
-
-                
-                switch (key)
-                {
-                    case ConsoleKey.LeftArrow:
-                        if (x > 0) x--;
-                        break;
-                    case ConsoleKey.RightArrow:
-                        if (x < Console.WindowWidth - 1) x++;
-                        break;
-                    case ConsoleKey.UpArrow:
-                        if (y > 0) y--;
-                        break;
-                    case ConsoleKey.DownArrow:
-                        if (y < Console.WindowHeight - 1) y++;
-                        break;
-                }
-
-                switch (key)
-                {
-                    case ConsoleKey.D1:
-                        currentColor = ConsoleColor.Red;
-                        break;
-                    case ConsoleKey.D2:
-                        currentColor = ConsoleColor.Green;
-                        break;
-                    case ConsoleKey.D3:
-                        currentColor = ConsoleColor.Blue;
-                        break;
-                    case ConsoleKey.D4:
-                        currentColor = ConsoleColor.Yellow;
-                        break;
-                    case ConsoleKey.D5:
-                        currentColor = ConsoleColor.Cyan;
-                        break;
-                    case ConsoleKey.D6:
-                        currentColor = ConsoleColor.Magenta;
-                        break;
-                    case ConsoleKey.D7:
-                        currentColor = ConsoleColor.White;
-                        break;
-                    case ConsoleKey.Escape:
-                        return;
-                         default;
-                        break;
-                }
-
-                
-                if (key == ConsoleKey.Spacebar)
-                {
-                    Console.SetCursorPosition(x, y);
-                    Console.ForegroundColor = currentColor;
-                    Console.Write("█");
-                }
-
-                Console.SetCursorPosition(x, y);
+                case ConsoleKey.UpArrow:
+                    if (cursorY > 1) cursorY--; 
+                    break;
+                case ConsoleKey.DownArrow:
+                    if (cursorY < Console.WindowHeight - 2) cursorY++; 
+                    break;
+                case ConsoleKey.LeftArrow:
+                    if (cursorX > 1) cursorX--; 
+                    break;
+                case ConsoleKey.RightArrow:
+                    if (cursorX < Console.WindowWidth - 2) cursorX++; 
+                    break;
+                case ConsoleKey.Spacebar:
+                    ColorCurrentPosition(currentColor);
+                    break;
+               case ConsoleKey.D0:
+                    currentColor = ConsoleColor.Black; 
+                break;
+                case ConsoleKey.D1:
+                    currentColor = ConsoleColor.Red; 
+                break;
+                case ConsoleKey.D2:
+                    currentColor = ConsoleColor.Green; 
+                break;
+                case ConsoleKey.D3:
+                    currentColor = ConsoleColor.Blue; 
+                break;
+                case ConsoleKey.D4:
+                    currentColor = ConsoleColor.Cyan; 
+                break;
+                case ConsoleKey.D5:
+                    currentColor = ConsoleColor.Magenta; 
+                break;
             }
-
         }
     }
-}
+
+    static void DrawFrame()
+    {
+        Console.Clear();
+        Console.ForegroundColor = frameColor;
+
+        
+        for (int i = 0; i < Console.WindowWidth; i++)
+        {
+            Console.SetCursorPosition(i, 0);
+            Console.Write("═");
+        }
+
+        
+        for (int i = 1; i < Console.WindowHeight - 1; i++)
+        {
+            Console.SetCursorPosition(0, i);
+            Console.Write("║");
+            Console.SetCursorPosition(Console.WindowWidth - 1, i);
+            Console.Write("║");
+        }
+
+        
+        for (int i = 0; i < Console.WindowWidth; i++)
+        {
+            Console.SetCursorPosition(i, Console.WindowHeight - 1);
+            Console.Write("═");
+        }
+
+        Console.ResetColor();
+    }
+
+    static void DrawCursor()
+    {
+        Console.SetCursorPosition(cursorX, cursorY);
+        Console.ForegroundColor = cursorColor; 
+        Console.Write("■"); 
+        Console.ResetColor();
+    }
+
+    static void ColorCurrentPosition(ConsoleColor color)
+    {
+        Console.SetCursorPosition(cursorX, cursorY);
+        Console.BackgroundColor = color;
+        Console.Write(" "); 
+        Console.ResetColor();
+    }
+
+    
 }
