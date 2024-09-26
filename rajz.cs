@@ -20,7 +20,6 @@ class Program
             Console.WriteLine("Használja a nyilakat a kurzor mozgatásához.");
             Console.WriteLine("Nyomja meg a SPACE-t a színezéshez.");
             Console.WriteLine("Számgombok a szín váltásához (0-9).");
-            Console.WriteLine("SHIFT + Számgomb a kurzor színének változtatásához.");
             Console.WriteLine($"Aktuális szín: {currentColor}, Kurzor szín: {cursorColor}");
 
             DrawCursor();
